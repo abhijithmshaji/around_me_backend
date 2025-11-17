@@ -42,3 +42,13 @@ export const createEvent = async (req, res) => {
         res.status(500).json({ success: false, message: 'Server error' });
     }
 };
+
+export const getEvents = async (req, res) => {
+    try {
+        const events = await Event.find();
+        res.json(events);
+    } catch (err) {
+        console.error("Error fetching events:", err);
+        res.status(500).json({ error: "Server Error" });
+    }
+};

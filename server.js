@@ -1,13 +1,13 @@
 import express from "express";
 import mongoose from "mongoose";
-// import dotenv from "dotenv";
+import dotenv from "dotenv";
 import cors from "cors";
 import userRoutes from "./routes/userRoutes.js";
 import eventRoutes from './routes/eventRoutes.js'
 const JWT_SECRET = "mySuperSecretKey123";
 global.JWT_SECRET = JWT_SECRET;
 
-// dotenv.config();
+dotenv.config();
 
 const app = express();
 
