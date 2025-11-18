@@ -11,6 +11,12 @@ const userSchema = new mongoose.Schema(
       default: 'general'
     },
     phone: String,
+    wishlist: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Event"
+    }
+  ]
   },
   { timestamps: true }
 );
