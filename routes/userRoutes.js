@@ -3,7 +3,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import { verifyToken } from "../middleware/auth-middleware.js";
-import { addToWishlist, removeFromWishlist } from "../controllers/userController.js";
+import { addToWishlist, removeFromWishlist, getUserById } from "../controllers/userController.js";
+import { updateProfile } from "../controllers/userController.js";
+import { uploadProfile } from "../middleware/uploadProfile.js";
 
 const router = express.Router();
 
@@ -55,7 +57,7 @@ router.post("/login", async (req, res) => {
     res.json({
       message: "Login successful",
       token,
-      user: { id: user._id, name: user.name, email: user.email, role: user.role },
+      user: { id: user._id, name: user.name, email: user.email, role: user.role, profileImage: user.profileImage, wishList: [user.wishlist] },
     });
 
   } catch (err) {
@@ -66,5 +68,13 @@ router.post("/login", async (req, res) => {
 // PROTECTED ROUTES
 router.post("/wishlist/:eventId", verifyToken, addToWishlist);
 router.delete("/wishlist/:eventId", verifyToken, removeFromWishlist);
+
+router.put(
+  "/profile",
+  verifyToken,
+  uploadProfile.single("profileImage"),
+  updateProfile
+);
+router.get("/:id", verifyToken, getUserById);
 
 export default router;
