@@ -14,6 +14,8 @@ export const createEvent = async (req, res) => {
             isTicketed,
             ticketName,
             ticketPrice,
+            host,
+            contact
         } = req.body;
 
         // handle uploaded images (from multer or cloud upload)
@@ -33,10 +35,17 @@ export const createEvent = async (req, res) => {
             isTicketed,
             ticketName,
             ticketPrice,
+            host,
+            contact
         });
 
         await newEvent.save();
-        res.status(201).json({ success: true, event: newEvent });
+        const populatedEvent = await newEvent.populate("host", "name email phone profileImage");
+
+        res.status(201).json({
+            success: true,
+            event: populatedEvent
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Server error' });
@@ -49,6 +58,16 @@ export const getEvents = async (req, res) => {
         res.json(events);
     } catch (err) {
         console.error("Error fetching events:", err);
+        res.status(500).json({ error: "Server Error" });
+    }
+};
+
+export const getEventById = async (req, res) => {
+    try {
+        const event = await Event.findById(req.params.id);
+        res.json(event)
+    } catch (err) {
+          console.error("Error fetching event:", err);
         res.status(500).json({ error: "Server Error" });
     }
 };

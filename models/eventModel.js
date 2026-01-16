@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import { type } from 'os';
+import { ref } from 'process';
 
 const eventSchema = new mongoose.Schema(
   {
@@ -63,6 +65,10 @@ const eventSchema = new mongoose.Schema(
     createdAt: {
       type: Date,
       default: Date.now,
+    },
+    host: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref:'User'
     },
   },
   { timestamps: true }

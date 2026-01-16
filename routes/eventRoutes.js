@@ -2,7 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
-import  {createEvent,getEvents}  from '../controllers/eventController.js';
+import  {createEvent,getEvents,getEventById}  from '../controllers/eventController.js';
 
 const router = express.Router();
 
@@ -25,6 +25,7 @@ const upload = multer({ storage });
 // handle multipart/form-data with multiple banners
 router.post('/create', upload.array('banners', 10), createEvent);
 
-router.get('/',getEvents)
+router.get('/',getEvents);
+router.get('/:id', getEventById);
 
 export default router;

@@ -65,6 +65,57 @@ router.post("/login", async (req, res) => {
   }
 });
 
+
+router.post("/update-password", verifyToken, async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Validate current password
+    const validPass = await bcrypt.compare(currentPassword, user.password);
+    if (!validPass) {
+      return res.status(400).json({ message: "Incorrect current password" });
+    }
+
+    // Save new hashed password
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    res.json({ message: "Password updated", user });
+
+  } catch (err) {
+    res.status(500).json({ message: "Server error", err });
+  }
+});
+
+router.post("/update-email", verifyToken, async (req, res) => {
+  try {
+    const { currentEmail, newEmail } = req.body;
+
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Validate current password
+    
+    if (currentEmail === newEmail) {
+      return res.status(400).json({ message: "Incorrect current password" });
+    }
+
+    // Save new hashed password
+    user.email = newEmail;
+    await user.save();
+
+    res.json({ message: "Password updated", user });
+
+  } catch (err) {
+    res.status(500).json({ message: "Server error", err });
+  }
+});
+
+
+
 // PROTECTED ROUTES
 router.post("/wishlist/:eventId", verifyToken, addToWishlist);
 router.delete("/wishlist/:eventId", verifyToken, removeFromWishlist);
