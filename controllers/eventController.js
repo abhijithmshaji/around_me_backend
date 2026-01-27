@@ -71,3 +71,13 @@ export const getEventById = async (req, res) => {
         res.status(500).json({ error: "Server Error" });
     }
 };
+export const deleteEvent = async (req, res) => {
+    try {
+        const event = await Event.findByIdAndDelete(req.params.id);
+        const title = event.title
+        res.json({message:`Event ${title} is deleted successfully`})
+    } catch (err) {
+          console.error("Error fetching event:", err);
+        res.status(500).json({ error: "Server Error" });
+    }
+};

@@ -2,7 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
-import  {createEvent,getEvents,getEventById}  from '../controllers/eventController.js';
+import  {createEvent,getEvents,getEventById, deleteEvent}  from '../controllers/eventController.js';
 
 const router = express.Router();
 
@@ -27,5 +27,6 @@ router.post('/create', upload.array('banners', 10), createEvent);
 
 router.get('/',getEvents);
 router.get('/:id', getEventById);
+router.delete('/:id', deleteEvent);
 
 export default router;
